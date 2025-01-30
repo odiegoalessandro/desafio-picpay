@@ -3,6 +3,7 @@ package com.desafio.picpay.service;
 
 import com.desafio.picpay.dto.CreateTransferDto;
 import com.desafio.picpay.dto.CreateTransferWithUserObjectDto;
+import com.desafio.picpay.dto.TransferResponseDto;
 import com.desafio.picpay.entity.Transfer;
 import com.desafio.picpay.entity.User;
 import com.desafio.picpay.repository.TransferRepository;
@@ -30,7 +31,7 @@ public class TransferService {
     this.createTransferValidators = createTransferValidators;
   }
   @Transactional
-  public Transfer createTransfer(CreateTransferDto createTransferDto) {
+  public TransferResponseDto createTransfer(CreateTransferDto createTransferDto) {
     User sender = userRepository.findById(createTransferDto.senderId())
         .orElseThrow(() -> new EntityNotFoundException("Sender user not found"));
 
@@ -56,6 +57,14 @@ public class TransferService {
 
     userRepository.saveAll(List.of(sender, receiver));
 
-    return transferRepository.save(new Transfer(dto));
+    var transfer = transferRepository.save(new Transfer(dto));
+
+    return new TransferResponseDto(
+        transfer.getId(),
+        transfer.getAmount(),
+        transfer.getSender().getId(),
+        transfer.getReceiver().getId(),
+        transfer.getCreateAt()
+    );
   }
 }

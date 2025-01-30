@@ -1,7 +1,7 @@
 package com.desafio.picpay.controller;
 
 import com.desafio.picpay.dto.CreateTransferDto;
-import com.desafio.picpay.entity.Transfer;
+import com.desafio.picpay.dto.TransferResponseDto;
 import com.desafio.picpay.service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ public class TransferController {
   }
 
   @PostMapping
-  public Transfer createTransfer(@RequestBody @Valid CreateTransferDto createTransferDto){
+  public TransferResponseDto createTransfer(@RequestBody @Valid CreateTransferDto createTransferDto){
     return this.transferService.createTransfer(createTransferDto);
   }
 }
